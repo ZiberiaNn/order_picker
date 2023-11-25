@@ -13,6 +13,7 @@ import 'package:order_picker/domain/entities/user.dart';
 import 'package:order_picker/infrastructure/constants/url_string.dart';
 import 'package:order_picker/presentation/providers/auth_provider.dart';
 import 'package:order_picker/presentation/screens/orders_screen.dart';
+import 'package:order_picker/presentation/screens/product_details_screen.dart';
 import 'package:order_picker/presentation/widgets/button.dart';
 import 'package:order_picker/presentation/widgets/rounded_text_field.dart';
 
@@ -50,6 +51,7 @@ class ProductsViewState extends ConsumerState<ProductList> {
             name: product["name"],
             amount: product["amount"],
             price: product["price"],
+            imageUrl: product["imageUrl"],
           ),
         );
       }
@@ -90,72 +92,87 @@ class ProductsViewState extends ConsumerState<ProductList> {
     List<Widget> products = [];
     for (var product in data) {
       products.add(
-        Card(
-          margin: const EdgeInsets.only(bottom: 12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-            side: const BorderSide(color: Color(0xff555555)),
-          ),
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      product.name,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      'Price: \$ ${product.price}',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w400,
-                        color: Color.fromRGBO(85, 85, 85, 1.0),
-                      ),
-                    ),
-                  ],
+        GestureDetector(
+          onTap: () {
+            print(product.toString());
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProductDetails(
+                  product: product,
                 ),
-                Stack(
-                  children: [
-                    SizedBox(
-                      width: 100,
-                      height: 60,
-                      child: Visibility(
-                        visible: loggedUser!.role == Role.user ? true : false,
-                        child: Button(
-                          onPressed: () {
-                            chooseAmount(context, product);
-                          },
-                          child: const ColorFiltered(
-                            colorFilter:
-                                ColorFilter.mode(Colors.white, BlendMode.srcIn),
-                            child: Icon(
-                              Icons.add_shopping_cart_rounded,
+              ),
+            );
+          },
+          child: Card(
+            margin: const EdgeInsets.only(bottom: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+              side: const BorderSide(color: Color(0xff555555)),
+            ),
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        product.name,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        'Price: \$ ${product.price}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w400,
+                          color: Color.fromRGBO(85, 85, 85, 1.0),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Stack(
+                    children: [
+                      SizedBox(
+                        width: 100,
+                        height: 60,
+                        child: Visibility(
+                          visible: loggedUser!.role == Role.user ? true : false,
+                          child: Button(
+                            onPressed: () {
+                              chooseAmount(context, product);
+                            },
+                            child: const ColorFiltered(
+                              colorFilter: ColorFilter.mode(
+                                  Colors.white, BlendMode.srcIn),
+                              child: Icon(
+                                Icons.add_shopping_cart_rounded,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    Visibility(
-                      visible: loggedUser.role != Role.user ? true : false,
-                      child: Positioned(
-                          top: 23,
-                          left: 15,
-                          child: Text(
-                            "Stock: ${product.amount}",
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          )),
-                    )
-                  ],
-                )
-              ],
+                      Visibility(
+                        visible: loggedUser.role != Role.user ? true : false,
+                        child: Positioned(
+                            top: 23,
+                            left: 15,
+                            child: Text(
+                              "Stock: ${product.amount}",
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            )),
+                      )
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
