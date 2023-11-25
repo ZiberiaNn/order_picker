@@ -1,12 +1,12 @@
 class CreateProductDTO {
   final String name;
-  final String imageUrl;
+  final String? imageUrl;
   final double price;
   final int amount;
 
   CreateProductDTO({
     required this.name,
-    required this.imageUrl,
+    this.imageUrl,
     required this.price,
     required this.amount,
   });
