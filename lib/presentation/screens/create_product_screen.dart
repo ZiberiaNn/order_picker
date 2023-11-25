@@ -47,7 +47,11 @@ class _NewProductDemoState extends ConsumerState<NewProductDemo> {
             labelText: 'price',
             keyboardType: TextInputType.number,
             onChanged: (value) {
-              newProduct.price = double.parse(value);
+              if (value.isNotEmpty) {
+                newProduct.price = double.parse(value);
+              } else {
+                newProduct.price = 0;
+              }
             },
           ),
           const SizedBox(height: 10),
@@ -56,7 +60,11 @@ class _NewProductDemoState extends ConsumerState<NewProductDemo> {
             labelText: 'amount',
             keyboardType: TextInputType.number,
             onChanged: (value) {
-              newProduct.amount = int.parse(value);
+              if (value.isNotEmpty) {
+                newProduct.amount = int.parse(value);
+              } else {
+                newProduct.amount = 0;
+              }
             },
           ),
           const SizedBox(height: 10),
