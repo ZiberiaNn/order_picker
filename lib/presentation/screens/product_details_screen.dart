@@ -49,7 +49,8 @@ class ProductDetails extends ConsumerWidget {
               const SizedBox(height: 20),
               ImageContainer(imageUrl: product?.imageUrl),
               const SizedBox(height: 20),
-              if (ref.read(authProvider).loggedUser?.role == Role.admin)
+              if (ref.read(authProvider).loggedUser?.role == Role.admin ||
+                  ref.read(authProvider).loggedUser?.role == Role.employee)
                 Button(
                   onPressed: () {
                     chooseAmount(
